@@ -1,8 +1,9 @@
+import HomePage from "./pages/HomePage.jsx";
+
 function App() {
   return (
     <>
-      <div>
-      </div>
+      <HomePage />
     </>
   )
 }
