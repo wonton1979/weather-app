@@ -128,13 +128,16 @@ export default function HomePage(){
     return (
         <>
             <section className="rounded-xl border border-slate-400 bg-white shadow-sm overflow-hidden md:w-1/2 lg:w-1/3 mt-8 mx-auto">
+
                 <Header
                         currentWeatherData={currentWeatherData}
                         handleBackToCurrentWeather={handleBackToCurrentWeather}
                         country={currentWeatherData.country}
                         isCelsius={isCelsius}
                         setIsCelsius={setIsCelsius}
+                        isFutureDateSelected={isFutureDateSelected}
                 />
+
                 <DetailsCard
                     currentWeatherData={currentWeatherData}
                     isCelsius={isCelsius}
@@ -161,7 +164,7 @@ export default function HomePage(){
 
                 <div className="px-4 pb-4">
                     <p className="text-xs font-medium text-slate-500 mb-2">Next 7 days</p>
-                    <ul className="divide-y divide-slate-100 rounded-xl border border-slate-400 overflow-hidden">
+                    <ul className="divide-y divide-slate-400 rounded-xl border border-slate-400 overflow-hidden">
                         {sevenDaysWeatherSummary && sevenDaysWeatherSummary.map((eachDay)=>(
                             <
                                 DailySummaryCard
