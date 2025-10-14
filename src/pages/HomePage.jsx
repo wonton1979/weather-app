@@ -129,7 +129,7 @@ export default function HomePage(){
                         setIsCelsius={setIsCelsius}
                 />
                 <DetailsCard
-                    city={displayWeatherData.city}
+                    city={currentWeatherData.city}
                     currentTime={displayWeatherData.currentTime}
                     emoji={displayWeatherData.emoji}
                     currentTemperature={displayWeatherData.currentTemperature}
