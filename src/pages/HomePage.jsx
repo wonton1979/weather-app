@@ -11,7 +11,7 @@ export default function HomePage(){
     const [loading, setLoading] = useState(true);
     const [currentWeatherData, setCurrentWeatherData] = useState(null);
     const [isCelsius,setIsCelsius] = useState(true);
-
+    const [twelveHoursWeatherSummary, setTwelveHoursWeatherSummary] = useState([]);
 
     useEffect(() => {
         setLoading(true);
@@ -47,6 +47,19 @@ export default function HomePage(){
                     emoji: getWeatherDescriptionAndEmoji(response.current.weather_code).emoji,
                     uxIndex: response.hourly.uv_index[currentHour].toFixed(2),
                 }));
+
+                const hourlySummary = []
+                for (let i = currentHour; i < currentHour + 12; i++) {
+                    hourlySummary.push(
+                        {
+                            "time":response.hourly.time[i].toString().split(" ")[4].slice(0, 5),
+                            "temperature": Math.round(response.hourly.temperature_2m[i]),
+                            "emoji": getWeatherDescriptionAndEmoji(response.hourly.weather_code[i]).emoji
+                        })
+                }
+
+                setTwelveHoursWeatherSummary(hourlySummary)
+
                 setLoading(false)
             }
             catch(error) {
@@ -55,6 +68,7 @@ export default function HomePage(){
         })()
 
     },[currentWeatherData?.latitude,currentWeatherData?.longitude]);
+
 
     if (loading) {
         return (
@@ -83,7 +97,7 @@ export default function HomePage(){
                     feelLike={currentWeatherData.feelLike}
                     windSpeed={currentWeatherData.windSpeed}
                     relativeHumidity={currentWeatherData.relativeHumidity}
-                    precipitationProbability={currentWeatherData.precipitation_probability}
+                    precipitationProbability={currentWeatherData.precipitationProbability}
                     sunrise={currentWeatherData.sunrise}
                     sunset={currentWeatherData.sunset}
                     uxIndex={currentWeatherData.uxIndex}
