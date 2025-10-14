@@ -33,6 +33,11 @@ export default function HomePage(){
         }));
     }
 
+    function handleBackToCurrentWeather(){
+        setIsFutureDateSelected(false);
+        setDisplayWeatherData(currentWeatherData);
+    }
+
     useEffect(() => {
         setLoading(true);
         abstractGeolocationApi().then((response) => {
@@ -123,7 +128,9 @@ export default function HomePage(){
     return (
         <>
             <section className="rounded-xl border border-slate-400 bg-white shadow-sm overflow-hidden md:w-1/2 lg:w-1/3 mt-8 mx-auto">
-                <Header region={currentWeatherData.region}
+                <Header
+                        currentWeatherData={currentWeatherData}
+                        handleBackToCurrentWeather={handleBackToCurrentWeather}
                         country={currentWeatherData.country}
                         isCelsius={isCelsius}
                         setIsCelsius={setIsCelsius}
