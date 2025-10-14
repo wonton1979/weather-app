@@ -1,4 +1,6 @@
-export default function DetailsCard({city,currentTime,emoji,currentTemperature,
+import celsiusToFahrenheit from "../utils/celsiusToFahrenheit.js";
+
+export default function DetailsCard({city,currentTime,emoji,currentTemperature,isCelsius,
                                         description,windSpeed,uxIndex,sunset,feelLike,
                                         sunrise,relativeHumidity,precipitationProbability}) {
     return (
@@ -12,13 +14,15 @@ export default function DetailsCard({city,currentTime,emoji,currentTemperature,
             </div>
 
             <div className="mt-3 flex items-end gap-2">
-                <p className="text-4xl font-bold text-gray-900">{currentTemperature}°</p>
+                <p className="text-4xl font-bold text-gray-900">
+                    {isCelsius ? currentTemperature : celsiusToFahrenheit(currentTemperature)}°
+                </p>
                 <p className="text-sm text-gray-600 mb-1">{description}</p>
             </div>
 
             <div className="mt-5 grid grid-cols-2 gap-y-3 text-sm text-gray-700">
                 <div className={"flex items-center gap-2 "}>
-                    🌡️ <span>Feels Like {feelLike}°</span>
+                    🌡️ <span>Feels Like {isCelsius ? feelLike : celsiusToFahrenheit(feelLike)}°</span>
                 </div>
                 <div className="flex items-center gap-2">
                     💨 <span>Wind Speed {windSpeed} km/h</span>
