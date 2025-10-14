@@ -17,6 +17,7 @@ export default function HomePage(){
     const [twelveHoursWeatherSummary, setTwelveHoursWeatherSummary] = useState([]);
     const [sevenDaysWeatherSummary, setSevenDaysWeatherSummary] = useState([]);
     const [displayWeatherData,setDisplayWeatherData] = useState(null);
+    const [isFutureDateSelected,setIsFutureDateSelected] = useState(false);
 
     function displayWeatherDetails(dayWeatherSummary) {
         setDisplayWeatherData(currentWeatherData=>({...currentWeatherData,
@@ -128,18 +129,19 @@ export default function HomePage(){
                         setIsCelsius={setIsCelsius}
                 />
                 <DetailsCard
-                    city={currentWeatherData.city}
-                    currentTime={currentWeatherData.currentTime}
-                    emoji={currentWeatherData.emoji}
-                    currentTemperature={currentWeatherData.currentTemperature}
-                    description={currentWeatherData.description}
-                    feelLike={currentWeatherData.feelLike}
-                    windSpeed={currentWeatherData.windSpeed}
-                    relativeHumidity={currentWeatherData.relativeHumidity}
-                    precipitationProbability={currentWeatherData.precipitationProbability}
-                    sunrise={currentWeatherData.sunrise}
-                    sunset={currentWeatherData.sunset}
-                    uxIndex={currentWeatherData.uxIndex}
+                    city={displayWeatherData.city}
+                    currentTime={displayWeatherData.currentTime}
+                    emoji={displayWeatherData.emoji}
+                    currentTemperature={displayWeatherData.currentTemperature}
+                    description={displayWeatherData.description}
+                    feelLike={displayWeatherData.feelLike}
+                    windSpeed={displayWeatherData.windSpeed}
+                    relativeHumidity={displayWeatherData.relativeHumidity}
+                    precipitationProbability={displayWeatherData.precipitationProbability}
+                    sunrise={displayWeatherData.sunrise}
+                    sunset={displayWeatherData.sunset}
+                    uxIndex={displayWeatherData.uxIndex}
+                    isFutureDateSelected={isFutureDateSelected}
                     isCelsius={isCelsius}
                 />
 
