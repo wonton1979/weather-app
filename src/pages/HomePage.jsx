@@ -87,6 +87,7 @@ export default function HomePage(){
                     sunrise={currentWeatherData.sunrise}
                     sunset={currentWeatherData.sunset}
                     uxIndex={currentWeatherData.uxIndex}
+                    isCelsius={isCelsius}
                 />
             </section>
         </>
