@@ -7,6 +7,7 @@ import openMeteoApi from "../services/openMeteoApi.js";
 import getWeatherDescriptionAndEmoji from "../utils/weatherCodesTable.js";
 import DetailsCard from "../components/DetailCard.jsx";
 import HourlySummaryCard from "../components/HourlySummaryCard.jsx";
+import DailySummaryCard from "../components/DailySummaryCard.jsx";
 
 export default function HomePage(){
     const [loading, setLoading] = useState(true);
@@ -30,7 +31,6 @@ export default function HomePage(){
     useEffect(() => {
 
         if(!currentWeatherData?.latitude || !currentWeatherData.longitude) return;
-        setLoading(true);
 
         (async () => {
             try {
@@ -81,7 +81,6 @@ export default function HomePage(){
                 }
                 setSevenDaysWeatherSummary(sevenDaysSummary);
 
-                setLoading(false)
             }
             catch(error) {
                 console.error(error)
@@ -141,6 +140,25 @@ export default function HomePage(){
                             ))}
                     </div>
                 </div>
+
+                <div className="px-4 pb-4">
+                    <p className="text-xs font-medium text-slate-500 mb-2">Next 7 days</p>
+                    <ul className="divide-y divide-slate-100 rounded-xl border border-slate-400 overflow-hidden">
+                        {sevenDaysWeatherSummary && sevenDaysWeatherSummary.map((eachDay)=>(
+                            <
+                                DailySummaryCard
+                                key={eachDay.day}
+                                day={eachDay.day}
+                                emoji={eachDay.emoji}
+                                temperatureMax={eachDay.temperatureMax}
+                                temperatureMin={eachDay.temperatureMin}
+                                precipitationProbabilityMax={eachDay.precipitationProbabilityMax}
+                                isCelsius ={isCelsius}
+                            />
+                        ))}
+                    </ul>
+                </div>
+
             </section>
         </>
     )
