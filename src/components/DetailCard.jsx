@@ -34,7 +34,7 @@ export default function DetailsCard({currentWeatherData,displayWeatherData,isFut
             </div>
 
             <div className="mt-5 grid grid-cols-2 gap-y-3 text-sm text-gray-700">
-                <div className={"flex items-center gap-2 "}>
+                <div className={`flex items-center gap-2 ${isFutureDateSelected ? "hidden" : "block" }`}>
                     🌡️ <span>Feels Like {displayWeatherData?.feelLike && (
                     isCelsius ? displayWeatherData.feelLike : celsiusToFahrenheit(displayWeatherData.feelLike))}°</span>
                 </div>
@@ -43,7 +43,7 @@ export default function DetailsCard({currentWeatherData,displayWeatherData,isFut
                     displayWeatherData.windSpeed
                 )} km/h</span>
                 </div>
-                <div className={"flex items-center gap-2"}>
+                <div className={`flex items-center gap-2 ${isFutureDateSelected ? "hidden" : "block" }`}>
                     💧 <span>Humidity  {displayWeatherData?.relativeHumidity && (
                     displayWeatherData.relativeHumidity
                 )}%</span>
