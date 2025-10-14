@@ -6,6 +6,7 @@ import Header from "../components/Header.jsx";
 import openMeteoApi from "../services/openMeteoApi.js";
 import getWeatherDescriptionAndEmoji from "../utils/weatherCodesTable.js";
 import DetailsCard from "../components/DetailCard.jsx";
+import HourlySummaryCard from "../components/HourlySummaryCard.jsx";
 
 export default function HomePage(){
     const [loading, setLoading] = useState(true);
@@ -103,6 +104,23 @@ export default function HomePage(){
                     uxIndex={currentWeatherData.uxIndex}
                     isCelsius={isCelsius}
                 />
+
+                <div className="px-4 pb-4">
+                    <p className="text-xs font-medium text-slate-500 mb-2">Next 12 hours</p>
+                    <div className="flex gap-2 overflow-x-auto scrollbar-thin scrollbar-thumb-slate-200">
+                        {twelveHoursWeatherSummary && twelveHoursWeatherSummary.map((eachHour)=>
+                            (
+                                <
+                                    HourlySummaryCard
+                                    key={eachHour.time}
+                                    time={eachHour.time}
+                                    emoji={eachHour.emoji}
+                                    temperature={eachHour.temperature}
+                                    isCelsius ={isCelsius}
+                                />
+                            ))}
+                    </div>
+                </div>
             </section>
         </>
     )
