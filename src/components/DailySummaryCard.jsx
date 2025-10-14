@@ -1,9 +1,11 @@
 import celsiusToFahrenheit from "../utils/celsiusToFahrenheit.js";
 
-export default function DailySummaryCard({day,emoji,temperatureMax,temperatureMin,precipitationProbabilityMax,isCelsius}) {
+export default function DailySummaryCard({dayWeatherSummary,isCelsius,displayWeatherDetails}) {
+    const {day,emoji,temperatureMax,temperatureMin,precipitationProbabilityMax} = dayWeatherSummary
     return (
         <>
-            <li className="grid grid-cols-5 items-center gap-2 px-3 py-2 text-sm cursor-pointer">
+            <li className="grid grid-cols-5 items-center gap-2 px-3 py-2 text-sm cursor-pointer"
+                onClick={()=>displayWeatherDetails(dayWeatherSummary)}>
                 <span className="text-slate-700">{day}</span>
                 <span className="text-xl" aria-hidden="true">{emoji}</span>
                 <span className="text-slate-500">
