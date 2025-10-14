@@ -1,8 +1,9 @@
 import celsiusToFahrenheit from "../utils/celsiusToFahrenheit.js";
 
-export default function DetailsCard({city,currentTime,emoji,currentTemperature,isCelsius,
-                                        description,windSpeed,uxIndex,sunset,feelLike,
-                                        sunrise,relativeHumidity,precipitationProbability}) {
+export default function DetailsCard({currentWeatherData,displayWeatherData,isFutureDateSelected,isCelsius}) {
+    const {city} = currentWeatherData;
+    const {currentTime,emoji,currentTemperature,description,windSpeed,
+        uxIndex,sunset,feelLike,sunrise,relativeHumidity,precipitationProbability} =displayWeatherData;
     return (
         <div className="p-5 bg-white">
             <div className="flex items-center justify-between">
