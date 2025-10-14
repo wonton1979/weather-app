@@ -13,6 +13,7 @@ export default function HomePage(){
     const [currentWeatherData, setCurrentWeatherData] = useState(null);
     const [isCelsius,setIsCelsius] = useState(true);
     const [twelveHoursWeatherSummary, setTwelveHoursWeatherSummary] = useState([]);
+    const [sevenDaysWeatherSummary, setSevenDaysWeatherSummary] = useState([]);
 
     useEffect(() => {
         setLoading(true);
@@ -58,8 +59,27 @@ export default function HomePage(){
                             "emoji": getWeatherDescriptionAndEmoji(response.hourly.weather_code[i]).emoji
                         })
                 }
-
                 setTwelveHoursWeatherSummary(hourlySummary)
+
+                const sevenDaysSummary = []
+                const timeRegexPattern =  /^[A-Za-z]{3}\s[A-Za-z]{3}\s[0-9]{2}\s[0-9]{4}/;
+                for(let i = 1; i < 8; i++){
+                    sevenDaysSummary.push(
+                        {
+                            "day": response.daily.time[i].toString().split(" ")[0],
+                            "time": response.daily.time[i].toString().match(timeRegexPattern)[0],
+                            "emoji": getWeatherDescriptionAndEmoji(response.daily.weather_code[i]).emoji,
+                            "temperatureMax": Math.round(response.daily.temperature_2m_max[i]),
+                            "temperatureMin": Math.round(response.daily.temperature_2m_min[i]),
+                            "precipitationProbabilityMax": response.daily.precipitation_probability_max[i],
+                            "windSpeedMax": Math.round(response.daily.wind_speed_10m_max[i]),
+                            "sunrise": response.daily.sunrise[i].toString().split(" ")[4].slice(0,5),
+                            "sunset": response.daily.sunset[i].toString().split(" ")[4].slice(0,5),
+                            "uxIndexMax": response.daily.uv_index_max[i].toFixed(2),
+                        }
+                    )
+                }
+                setSevenDaysWeatherSummary(sevenDaysSummary);
 
                 setLoading(false)
             }
