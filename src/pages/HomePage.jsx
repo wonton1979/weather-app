@@ -173,6 +173,7 @@ export default function HomePage(){
                     invalidDatePicked={invalidDatePicked}
                     setSelectedDate={setSelectedDate}
                     handleDateChange={handleDateChange}
+                    selectedDate={selectedDate}
                 />
 
                 <Header
