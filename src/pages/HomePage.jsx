@@ -9,6 +9,7 @@ import DetailsCard from "../components/DetailCard.jsx";
 import HourlySummaryCard from "../components/HourlySummaryCard.jsx";
 import DailySummaryCard from "../components/DailySummaryCard.jsx";
 import Footer from "../components/Footer.jsx";
+import DatePicker from "../components/DatePicker.jsx";
 
 export default function HomePage(){
     const [loading, setLoading] = useState(true);
@@ -18,6 +19,11 @@ export default function HomePage(){
     const [sevenDaysWeatherSummary, setSevenDaysWeatherSummary] = useState([]);
     const [displayWeatherData,setDisplayWeatherData] = useState(null);
     const [isFutureDateSelected,setIsFutureDateSelected] = useState(false);
+    const [rawWeatherData, setRawWeatherData] = useState(null);
+    const [invalidDatePicked, setInvalidDatePicked] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
+    const [minDate, setMinDate] = useState(new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split("T")[0]);
+    const [maxDate, setMaxDate] = useState(new Date(new Date().setDate(new Date().getDate() + 14)).toISOString().split("T")[0]);
 
     function displayWeatherDetails(dayWeatherSummary) {
         setDisplayWeatherData(currentWeatherData=>({...currentWeatherData,
@@ -39,6 +45,36 @@ export default function HomePage(){
         setDisplayWeatherData(currentWeatherData);
     }
 
+    function handleDateChange(){
+        if (new Date(selectedDate) < new Date() || new Date(selectedDate) > new Date().setDate(new Date().getDate() + 14)){
+            setInvalidDatePicked(true);
+        }
+        else{
+            let dayIndex = 0;
+            for(let eachDate of rawWeatherData.daily.time){
+                if(new Date(selectedDate).toISOString().split("T")[0] === new Date(eachDate.toString().slice(4,15)).toLocaleString("en-CA").split(",")[0]){
+                    break;
+                }
+                dayIndex++;
+            }
+            const timeRegexPattern =  /^[A-Za-z]{3}\s[A-Za-z]{3}\s[0-9]{2}\s[0-9]{4}/;
+            const selectedDateWeatherSummary = {
+                "day": rawWeatherData.daily.time[dayIndex].toString().split(" ")[0],
+                "time": rawWeatherData.daily.time[dayIndex].toString().match(timeRegexPattern)[0],
+                "emoji": getWeatherDescriptionAndEmoji(rawWeatherData.daily.weather_code[dayIndex]).emoji,
+                "temperatureMax": Math.round(rawWeatherData.daily.temperature_2m_max[dayIndex]),
+                "temperatureMin": Math.round(rawWeatherData.daily.temperature_2m_min[dayIndex]),
+                "precipitationProbabilityMax": rawWeatherData.daily.precipitation_probability_max[dayIndex],
+                "windSpeedMax": Math.round(rawWeatherData.daily.wind_speed_10m_max[dayIndex]),
+                "sunrise": rawWeatherData.daily.sunrise[dayIndex].toString().split(" ")[4].slice(0, 5),
+                "sunset": rawWeatherData.daily.sunset[dayIndex].toString().split(" ")[4].slice(0, 5),
+                "uxIndexMax": rawWeatherData.daily.uv_index_max[dayIndex].toFixed(2),
+            }
+            displayWeatherDetails(selectedDateWeatherSummary);
+            setInvalidDatePicked(false);
+        }
+    }
+
     useEffect(() => {
         setLoading(true);
         abstractGeolocationApi().then((response) => {
@@ -58,6 +94,7 @@ export default function HomePage(){
         (async () => {
             try {
                 const response = await openMeteoApi(currentWeatherData.latitude, currentWeatherData.longitude);
+                setRawWeatherData(response)
                 const currentHour = parseInt(response.current.time.toString().split(" ")[4].split(":")[0]);
                 setCurrentWeatherData(current => ({...current,
                     currentTime:response.current.time.toString().slice(0,25),
@@ -130,13 +167,21 @@ export default function HomePage(){
         <>
             <section className="rounded-xl border border-slate-400 bg-white shadow-sm overflow-hidden md:w-1/2 lg:w-1/3 mt-8 mx-auto">
 
+                <DatePicker
+                    minDate={minDate}
+                    maxDate={maxDate}
+                    invalidDatePicked={invalidDatePicked}
+                    setSelectedDate={setSelectedDate}
+                    handleDateChange={handleDateChange}
+                />
+
                 <Header
-                        currentWeatherData={currentWeatherData}
-                        handleBackToCurrentWeather={handleBackToCurrentWeather}
-                        country={currentWeatherData.country}
-                        isCelsius={isCelsius}
-                        setIsCelsius={setIsCelsius}
-                        isFutureDateSelected={isFutureDateSelected}
+                    currentWeatherData={currentWeatherData}
+                    handleBackToCurrentWeather={handleBackToCurrentWeather}
+                    country={currentWeatherData.country}
+                    isCelsius={isCelsius}
+                    setIsCelsius={setIsCelsius}
+                    isFutureDateSelected={isFutureDateSelected}
                 />
 
                 <DetailsCard
