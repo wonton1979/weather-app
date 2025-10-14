@@ -129,20 +129,10 @@ export default function HomePage(){
                         setIsCelsius={setIsCelsius}
                 />
                 <DetailsCard
-                    city={currentWeatherData.city}
-                    currentTime={displayWeatherData.currentTime}
-                    emoji={displayWeatherData.emoji}
-                    currentTemperature={displayWeatherData.currentTemperature}
-                    description={displayWeatherData.description}
-                    feelLike={displayWeatherData.feelLike}
-                    windSpeed={displayWeatherData.windSpeed}
-                    relativeHumidity={displayWeatherData.relativeHumidity}
-                    precipitationProbability={displayWeatherData.precipitationProbability}
-                    sunrise={displayWeatherData.sunrise}
-                    sunset={displayWeatherData.sunset}
-                    uxIndex={displayWeatherData.uxIndex}
-                    isFutureDateSelected={isFutureDateSelected}
+                    currentWeatherData={currentWeatherData}
                     isCelsius={isCelsius}
+                    displayWeatherData={displayWeatherData}
+                    isFutureDateSelected={isFutureDateSelected}
                 />
 
                 <div className="px-4 pb-4">
