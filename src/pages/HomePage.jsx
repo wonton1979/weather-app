@@ -31,6 +31,7 @@ export default function HomePage(){
             uxIndex: dayWeatherSummary.uxIndexMax,
             temperatureMin: dayWeatherSummary.temperatureMin,
         }));
+        setIsFutureDateSelected(true);
     }
 
     function handleBackToCurrentWeather(){
