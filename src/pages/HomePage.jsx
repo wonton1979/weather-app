@@ -3,6 +3,9 @@ import abstractGeolocationApi from "../services/abstractGeolocationApi.js";
 import Lottie from "lottie-react";
 import LoadingAnimation from "../assets/loading-animation.json";
 import Header from "../components/Header.jsx";
+import openMeteoApi from "../services/openMeteoApi.js";
+import getWeatherDescriptionAndEmoji from "../utils/weatherCodesTable.js";
+import DetailsCard from "../components/DetailCard.jsx";
 
 export default function HomePage(){
     const [loading, setLoading] = useState(true);
@@ -24,7 +27,34 @@ export default function HomePage(){
 
     useEffect(() => {
 
-    },[currentWeatherData]);
+        if(!currentWeatherData?.latitude || !currentWeatherData.longitude) return;
+        setLoading(true);
+
+        (async () => {
+            try {
+                const response = await openMeteoApi(currentWeatherData.latitude, currentWeatherData.longitude);
+                const currentHour = parseInt(response.current.time.toString().split(" ")[4].split(":")[0]);
+                setCurrentWeatherData(current => ({...current,
+                    currentTime:response.current.time.toString().slice(0,25),
+                    currentTemperature: Math.round(response.current.temperature_2m),
+                    feelLike: Math.round(response.current.apparent_temperature),
+                    relativeHumidity: response.current.relativeHumidity,
+                    precipitationProbability: response.hourly.precipitation_probability[currentHour],
+                    windSpeed: Math.round(response.current.wind_speed_10m),
+                    sunrise: response.daily.sunrise.toString().split(" ")[4].slice(0,5),
+                    sunset: response.daily.sunset.toString().split(" ")[4].slice(0,5),
+                    description: getWeatherDescriptionAndEmoji(response.current.weather_code).description,
+                    emoji: getWeatherDescriptionAndEmoji(response.current.weather_code).emoji,
+                    uxIndex: response.hourly.uv_index[currentHour].toFixed(2),
+                }));
+                setLoading(false)
+            }
+            catch(error) {
+                console.error(error)
+            }
+        })()
+
+    },[currentWeatherData?.latitude,currentWeatherData?.longitude]);
 
     if (loading) {
         return (
@@ -39,7 +69,25 @@ export default function HomePage(){
     return (
         <>
             <section className="rounded-xl border border-slate-400 bg-white shadow-sm overflow-hidden md:w-1/2 lg:w-1/3 mt-8 mx-auto">
-                <Header region={currentWeatherData.region} country={currentWeatherData.country} isCelsius={isCelsius} setIsCelsius={setIsCelsius}/>
+                <Header region={currentWeatherData.region}
+                        country={currentWeatherData.country}
+                        isCelsius={isCelsius}
+                        setIsCelsius={setIsCelsius}
+                />
+                <DetailsCard
+                    city={currentWeatherData.city}
+                    currentTime={currentWeatherData.currentTime}
+                    emoji={currentWeatherData.emoji}
+                    currentTemperature={currentWeatherData.currentTemperature}
+                    description={currentWeatherData.description}
+                    feelLike={currentWeatherData.feelLike}
+                    windSpeed={currentWeatherData.windSpeed}
+                    relativeHumidity={currentWeatherData.relativeHumidity}
+                    precipitationProbability={currentWeatherData.precipitation_probability}
+                    sunrise={currentWeatherData.sunrise}
+                    sunset={currentWeatherData.sunset}
+                    uxIndex={currentWeatherData.uxIndex}
+                />
             </section>
         </>
     )
