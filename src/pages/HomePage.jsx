@@ -8,6 +8,7 @@ import getWeatherDescriptionAndEmoji from "../utils/weatherCodesTable.js";
 import DetailsCard from "../components/DetailCard.jsx";
 import HourlySummaryCard from "../components/HourlySummaryCard.jsx";
 import DailySummaryCard from "../components/DailySummaryCard.jsx";
+import Footer from "../components/Footer.jsx";
 
 export default function HomePage(){
     const [loading, setLoading] = useState(true);
@@ -158,6 +159,8 @@ export default function HomePage(){
                         ))}
                     </ul>
                 </div>
+
+                <Footer />
 
             </section>
         </>
