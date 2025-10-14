@@ -16,6 +16,21 @@ export default function HomePage(){
     const [isCelsius,setIsCelsius] = useState(true);
     const [twelveHoursWeatherSummary, setTwelveHoursWeatherSummary] = useState([]);
     const [sevenDaysWeatherSummary, setSevenDaysWeatherSummary] = useState([]);
+    const [displayWeatherData,setDisplayWeatherData] = useState(null);
+
+    function displayWeatherDetails(dayWeatherSummary) {
+        setDisplayWeatherData(currentWeatherData=>({...currentWeatherData,
+            currentTime:dayWeatherSummary.time,
+            currentTemperature:dayWeatherSummary.temperatureMax,
+            precipitationProbability:dayWeatherSummary.precipitationProbabilityMax,
+            sunrise: dayWeatherSummary.sunrise,
+            sunset: dayWeatherSummary.sunset,
+            windSpeed: dayWeatherSummary.windSpeedMax,
+            emoji: dayWeatherSummary.emoji,
+            uxIndex: dayWeatherSummary.uxIndexMax,
+            temperatureMin: dayWeatherSummary.temperatureMin,
+        }));
+    }
 
     useEffect(() => {
         setLoading(true);
@@ -90,6 +105,9 @@ export default function HomePage(){
 
     },[currentWeatherData?.latitude,currentWeatherData?.longitude]);
 
+    useEffect(() => {
+        setDisplayWeatherData(currentWeatherData)
+    }, [twelveHoursWeatherSummary,sevenDaysWeatherSummary,currentWeatherData]);
 
     if (loading) {
         return (
@@ -149,12 +167,9 @@ export default function HomePage(){
                             <
                                 DailySummaryCard
                                 key={eachDay.day}
-                                day={eachDay.day}
-                                emoji={eachDay.emoji}
-                                temperatureMax={eachDay.temperatureMax}
-                                temperatureMin={eachDay.temperatureMin}
-                                precipitationProbabilityMax={eachDay.precipitationProbabilityMax}
+                                dayWeatherSummary={eachDay}
                                 isCelsius ={isCelsius}
+                                displayWeatherDetails={displayWeatherDetails}
                             />
                         ))}
                     </ul>
