@@ -10,6 +10,8 @@ import HourlySummaryCard from "../components/HourlySummaryCard.jsx";
 import DailySummaryCard from "../components/DailySummaryCard.jsx";
 import Footer from "../components/Footer.jsx";
 import DatePicker from "../components/DatePicker.jsx";
+import SearchBar from "../components/SearchBar.jsx";
+
 
 export default function HomePage(){
     const [loading, setLoading] = useState(true);
@@ -24,6 +26,9 @@ export default function HomePage(){
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
     const [minDate, setMinDate] = useState(new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split("T")[0]);
     const [maxDate, setMaxDate] = useState(new Date(new Date().setDate(new Date().getDate() + 14)).toISOString().split("T")[0]);
+    const [locationQuery, setLocationQuery] = useState("");
+    const [noLocationQueryResults, setNoLocationQueryResults] = useState(false);
+
 
     function displayWeatherDetails(dayWeatherSummary) {
         setDisplayWeatherData(currentWeatherData=>({...currentWeatherData,
@@ -73,6 +78,46 @@ export default function HomePage(){
             displayWeatherDetails(selectedDateWeatherSummary);
             setInvalidDatePicked(false);
         }
+    }
+
+    function handleLocationSearch(e){
+        setNoLocationQueryResults(false)
+        const googleMapGeocodingApiKey = import.meta.env.VITE_GOOGLE_MAP_GEOCODING_API_KEY;
+        fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${locationQuery}&key=${googleMapGeocodingApiKey}`)
+            .then(res => res.json()).then((data) => {
+            if(data.status !== "ZERO_RESULTS"){
+                let region;
+                let country;
+                if (data.results[0].address_components.length === 1){
+                    region = data.results[0].address_components[0].long_name;
+                    country = data.results[0].address_components[0].long_name;
+                }
+                else if(data.results[0].address_components.length === 2){
+                    region = data.results[0].address_components[1].long_name;
+                    country = data.results[0].address_components[1].long_name;
+                }
+                else if(data.results[0].address_components.length === 3){
+                    region = data.results[0].address_components[1].long_name;
+                    country = data.results[0].address_components[2].long_name;
+                }
+                else {
+                    region = data.results[0].address_components[2].long_name;
+                    country = data.results[0].address_components[3].long_name;
+                }
+
+                setCurrentWeatherData(current =>({...current,
+                    city: data.results[0].address_components[0].long_name,
+                    region:  region,
+                    country: country,
+                    latitude: data.results[0].geometry.location.lat,
+                    longitude: data.results[0].geometry.location.lng,
+                }));
+                setIsFutureDateSelected(false);
+            }
+            else {
+                setNoLocationQueryResults(true);
+            }
+        }).catch(err => setNoLocationQueryResults(true))
     }
 
     useEffect(() => {
@@ -166,6 +211,13 @@ export default function HomePage(){
     return (
         <>
             <section className="rounded-xl border border-slate-400 bg-white shadow-sm overflow-hidden md:w-1/2 lg:w-1/3 mt-8 mx-auto">
+
+                <SearchBar
+                    locationQuery={locationQuery}
+                    setLocationQuery={setLocationQuery}
+                    noLocationQueryResults={noLocationQueryResults}
+                    handleLocationSearch={handleLocationSearch}
+                />
 
                 <DatePicker
                     minDate={minDate}
