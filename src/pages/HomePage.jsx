@@ -28,6 +28,7 @@ export default function HomePage(){
     const [maxDate, setMaxDate] = useState(new Date(new Date().setDate(new Date().getDate() + 14)).toISOString().split("T")[0]);
     const [locationQuery, setLocationQuery] = useState("");
     const [noLocationQueryResults, setNoLocationQueryResults] = useState(false);
+    const [isDataFetching, setIsDataFetching] = useState(false);
 
 
     function displayWeatherDetails(dayWeatherSummary) {
@@ -82,6 +83,7 @@ export default function HomePage(){
 
     function handleLocationSearch(e){
         setNoLocationQueryResults(false)
+        setIsDataFetching(true)
         const googleMapGeocodingApiKey = import.meta.env.VITE_GOOGLE_MAP_GEOCODING_API_KEY;
         fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${locationQuery}&key=${googleMapGeocodingApiKey}`)
             .then(res => res.json()).then((data) => {
@@ -118,6 +120,9 @@ export default function HomePage(){
                 setNoLocationQueryResults(true);
             }
         }).catch(err => setNoLocationQueryResults(true))
+            .finally(() => {
+            setIsDataFetching(false)
+        })
     }
 
     useEffect(() => {
@@ -217,6 +222,7 @@ export default function HomePage(){
                     setLocationQuery={setLocationQuery}
                     noLocationQueryResults={noLocationQueryResults}
                     handleLocationSearch={handleLocationSearch}
+                    isDataFetching={isDataFetching}
                 />
 
                 <DatePicker
