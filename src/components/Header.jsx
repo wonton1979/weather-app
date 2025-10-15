@@ -1,6 +1,6 @@
 export default function Header({currentWeatherData,isCelsius,setIsCelsius,handleBackToCurrentWeather,isFutureDateSelected}) {
     return (
-        <header className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
+        <header className="flex items-center justify-between px-4 py-3 border-b border-slate-200">
             <div className="min-w-0">
                 <h2 className="text-lg font-semibold text-slate-800 truncate">
                     {currentWeatherData?.region && (
