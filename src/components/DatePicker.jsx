@@ -7,7 +7,7 @@ export default function datePicker({minDate, maxDate,invalidDatePicked,selectedD
                         border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-200"
                        onChange={e => setSelectedDate(e.target.value)} />
                 <button className="rounded-lg bg-slate-900 px-4 py-1 text-sm font-semibold text-white"
-                        onClick={handleDateChange}>Show</button>
+                        onClick={handleDateChange} title="Show weather for the selected date">Show</button>
             </div>
             {
                 invalidDatePicked && (
