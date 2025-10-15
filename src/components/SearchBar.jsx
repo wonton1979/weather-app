@@ -8,6 +8,7 @@ export default function WeatherSearchBar ({locationQuery, setLocationQuery,noLoc
                     value={locationQuery}
                     onChange={(e) => setLocationQuery(e.target.value)}
                     placeholder="eg. London"
+                    title="Search for the weather in the entered location"
                     className="w-full rounded-lg border
                             border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-200"
                 />
