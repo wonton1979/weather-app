@@ -132,7 +132,7 @@ npm run preview
 ## 📦 Deployment
 
 ### Netlify 
-
+https://weather-app-yguan.netlify.app/
 
 ---
 
